@@ -29,5 +29,10 @@
 모든 순서를 바꾼 다음에, 가장 왼쪽에 있는 바구니부터 바구니에 적혀있는 순서를 
 공백으로 구분해 출력한다.
 '''
-N=int(input('바구니 개수를 입력하세요.'))
-M=int(input('줄 개수를 입력하세요.'))
+N, M=map(int, input().split(' '))
+l=[n+1 for n in range(N)]
+for _ in range(M):
+    i, j=map(int, input().split(' '))
+    l[i-1:j]=l[i-1:j][::-1]
+for e in l:
+    print(e, end=' ')
