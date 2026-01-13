@@ -63,3 +63,10 @@ for e in l:
 '''
 N=int(input())
 scores=list(map(int, input().split(' ')))
+new_scores=[]
+M=max(scores)
+for score in scores:
+    new_score=score/M*100
+    new_scores.append(new_score)
+average=sum(new_scores)/N
+print(average)
