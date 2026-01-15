@@ -91,3 +91,45 @@ if word==rev_word:
     print(1)
 else:
     print(0)
+
+# 1157번: 단어 공부
+# 문제
+'''
+알파벳 대소문자로 된 단어가 주어지면, 이 단어에서 가장 많이 사용된 알파벳이 무엇인지 
+알아내는 프로그램을 작성하시오. 단, 대문자와 소문자를 구분하지 않는다.
+'''
+# 입력
+'''
+첫째 줄에 알파벳 대소문자로 이루어진 단어가 주어진다. 주어지는 단어의 길이는 
+1,000,000을 넘지 않는다.
+'''
+# 출력
+'''
+첫째 줄에 이 단어에서 가장 많이 사용된 알파벳을 대문자로 출력한다. 단, 가장 많이 
+사용된 알파벳이 여러 개 존재하는 경우에는 ?를 출력한다.
+'''
+# 해법
+'''
+1. 단어를 입력받음
+2. 해당 단어의 모든 철자를 대문자로 변경
+3. 집합을 이용하여 단어에 있는 unique한 철자들을 저장
+4. 각 철자를 key로 하고 그 철자가 나온 횟수를 value로 하는 딕셔너리를 생성
+5. value에서 최댓값을 찾음
+6. 딕셔너리에서 value만을 가져와 리스트로 생성. 이 리스트에서 최댓값이 2개 이상이면 ?
+를 출력하고, 유일하면 그 value에 해당하는 key를 출력
+'''
+word=input()
+upper_word=word.upper()
+character_set=set(upper_word)
+freq_dict={}
+for character in character_set:
+    freq_dict[character]=upper_word.count(character)
+max_freq=max(freq_dict.values())
+values=list(freq_dict.values())
+if values.count(max_freq)>=2:
+    print('?')
+else:
+    for character in character_set:
+        if freq_dict[character]==max_freq:
+            print(character)
+            break
