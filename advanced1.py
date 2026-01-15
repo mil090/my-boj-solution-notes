@@ -173,3 +173,52 @@ for a in special_alphabets:
     word=word.replace(a, ' ')
 word=word.replace(' ', '')
 print(l+len(word))
+
+# 1316번: 그룹 단어 체커
+# 문제
+'''
+그룹 단어란 단어에 존재하는 모든 문자에 대해서, 각 문자가 연속해서 나타나는 경우만을 
+말한다. 예를 들면, ccazzzzbb는 c, a, z, b가 모두 연속해서 나타나고, kin도 
+k, i, n이 연속해서 나타나기 때문에 그룹 단어이지만, aabbbccb는 b가 떨어져서 
+나타나기 때문에 그룹 단어가 아니다.
+단어 N개를 입력으로 받아 그룹 단어의 개수를 출력하는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+첫째 줄에 단어의 개수 N이 들어온다. N은 100보다 작거나 같은 자연수이다. 
+둘째 줄부터 N개의 줄에 단어가 들어온다. 단어는 알파벳 소문자로만 되어있고 중복되지 
+않으며, 길이는 최대 100이다.
+'''
+# 출력
+'''
+첫째 줄에 그룹 단어의 개수를 출력한다.
+'''
+# 해법
+'''
+1. 단어의 개수를 입력받음
+2. 결과로 반환할 변수를 지정하여 0으로 초기화
+3. 단어를 입력받고, 입력받은 단어의 길이를 l로 저장
+4. 이 단어가 그룹 단어인지 판별할 bool 값을 지정하여 True로 초기화
+5. 0부터 l-2까지의 정수 i에 대하여, word[i]와 word[i+1]이 같은지 검사. 만약
+같다면 continue, 다르다면 word[i+1]이 word[:i]에 있는지 검사. 만약 있다면 앞에
+나온 단어가 다시 나온 것이므로 그룹 단어가 아님
+6. 그룹 단어가 아닌 것으로 판명되면 bool 값을 False로 바꾸고 반복문 탈출(더 이상
+검사할 필요가 없음)
+7. 반복문이 종료된 후 bool 값이 True이면 이 단어는 그룹 단어이므로 결과로 출력할
+값에 1을 더함
+8. result의 값을 출력
+'''
+N=int(input())
+result=0
+for _ in range(N):
+    word=input()
+    l=len(word)
+    is_group_word=True
+    for i in range(l-1):
+        if word[i]!=word[i+1]:
+            if word[i+1] in word[:i]:
+                is_group_word=False
+                break
+    if is_group_word:
+        result+=1
+print(result)
