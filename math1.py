@@ -364,3 +364,13 @@ if (V-A)/(A-B)==int((V-A)/(A-B)):
 else:
     n=int(int((V-A)/(A-B)))+2
 print(n)
+'''
+또 다른 풀이: math.ceil을 이용
+ceil은 소수점 이하를 올림하는 함수로, 특정 수보다 크거나 같은 최소 정수를 반환
+위 부등식에서 n>=(V-A)/(A-B)+1이고, 이를 정리하면 n>=(V-B)/(A-B)이므로, n은
+(V-B)/(A-B)보다 크거나 같은 최소 정수가 된다.
+'''
+from math import ceil
+A, B, V=map(int, input().split())
+n=ceil((V-B)/(A-B))
+print(n)
