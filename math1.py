@@ -88,3 +88,94 @@ for i in range(l-1, -1, -1):
         a+=1
     result+=num_to_token[a]
 print(result)
+
+# 2720번: 세탁소 사장 동혁
+# 문제
+'''
+미국으로 유학간 동혁이는 세탁소를 운영하고 있다. 동혁이는 최근에 아르바이트로 고등학생 
+리암을 채용했다.
+동혁이는 리암에게 실망했다.
+리암은 거스름돈을 주는 것을 자꾸 실수한다.
+심지어 $0.5달러를 줘야하는 경우에 거스름돈으로 $5달러를 주는것이다!
+어쩔수 없이 뛰어난 코딩 실력을 발휘해 리암을 도와주는 프로그램을 작성하려고 하지만, 
+디아블로를 하느라 코딩할 시간이 없어서 이 문제를 읽고 있는 여러분이 대신 해주어야 한다.
+거스름돈의 액수가 주어지면 리암이 줘야할 쿼터(Quarter, $0.25)의 개수, 
+다임(Dime, $0.10)의 개수, 니켈(Nickel, $0.05)의 개수, 페니(Penny, $0.01)의 
+개수를 구하는 프로그램을 작성하시오. 거스름돈은 항상 $5.00 이하이고, 손님이 받는 
+동전의 개수를 최소로 하려고 한다. 예를 들어, $1.24를 거슬러 주어야 한다면, 손님은 
+4쿼터, 2다임, 0니켈, 4페니를 받게 된다.
+'''
+# 입력
+'''
+첫째 줄에 테스트 케이스의 개수 T가 주어진다. 각 테스트 케이스는 거스름돈 C를 나타내는 
+정수 하나로 이루어져 있다. C의 단위는 센트이다. (1달러 = 100센트) (1<=C<=500)
+'''
+# 출력
+'''
+각 테스트케이스에 대해 필요한 쿼터의 개수, 다임의 개수, 니켈의 개수, 페니의 개수를 
+공백으로 구분하여 출력한다.
+'''
+# 해법
+'''
+각 화폐의 액수가 배수 관계가 되지 않으므로 탐욕적 기법은 최적해를 보장하지 못함
+주어진 동전의 액수를 센트로 환산하면
+쿼터: 25, 다임: 10, 니켈: 5, 페니: 1
+1. T를 입력받음
+2. 최적해를 구해 저장하기 위한 메모이제이션 테이블 memoization을 딕셔너리로 생성
+3. 초기 조건을 설정. 거스름돈이 0일 때는 동전이 필요 없으므로 memoization[0]=0
+4. 입력받은 거스름돈의 액수(단위: 센트) C를 입력받음
+5. C의 범위에 따라 비교 대상을 정함
+C<5이면 페니만 쓰임
+5<=C<10이면 니켈, 페니만 쓰임
+10<=C<25이면 다임, 니켈, 페니만 쓰임
+C>=25이면 쿼터, 다임, 니켈, 페니 모두 쓰일 수 있음
+6. memoization[C]가 될 수 있는 후보(C>=25)
+memoization[C-1]+1
+memoization[C-5]+1
+memoization[C-10]+1
+memoization[C-25]+1
+7. C<25일 때는 다임(10), 니켈(5), 페니(1)만 사용되고, 이 세 동전은 배수 관계이므로
+탐욕적 기법이 최적해를 보장
+8. C<25일 때 탐욕적 기법으로 memoization을 완성
+9. 반복문을 T번 돌며 memoization의 필요한 부분을 마저 완성. 입력값이 C일 때,
+구하는 최적해는 memoization[C]. 따라서 memoization[C]의 값을 구하기 위한
+memoization의 최소 길이는 C+1(memoization[0]~memoization[C])
+10. 각각의 동전이 몇 개 사용되는지에 대한 정보도 필요함. 각 동전이 사용된 개수를 저장할
+리스트 coins를 생성하여 [0, 0, 0, 0]으로 초기화. 각각은 쿼터(25), 다임(10),
+니켈(5), 페니(1)의 개수
+memoization[c]를 정할 때,
+memoization[c-25]+1이라면 coins[0]+=1
+memoization[c-10]+1이라면 coins[1]+=1
+memoization[c-5]+1이라면 coins[2]+=1
+memoization[c-1]+1이라면 coins[3]+=1
+11. coins의 원소들을 공백 간격으로 출력
+'''
+def return_change(cent: int, coins: list[int]):
+    memoization=[float('inf')]*(cent+1)
+    last_coin=[0]*(cent+1)
+    memoization[0]=0
+    for c in range(1, cent+1):
+        for coin in coins:
+# c>=coin 조건문을 설정하여 coin의 액수가 거스름돈 액수보다 작거나 같을 때만 비교
+# 만약 거스름돈의 액수보다 coin의 액수가 더 크면 그 coin은 사용되지 않음
+            if c>=coin:
+                if memoization[c-coin]+1<memoization[c]:
+                    memoization[c]=memoization[c-coin]+1
+                    last_coin[c]=coin
+    if memoization[cent]==float('inf'):
+        return None, None
+    combination=[]
+    current=cent
+    while current>0:
+        coin_used=last_coin[current]
+        combination.append(coin_used)
+        current-=coin_used
+    return memoization[cent], combination
+coin_list=[25, 10, 5, 1]
+T=int(input())
+for _ in range(T):
+    C=int(input())
+    n, com=return_change(C, coin_list)
+    for coin in coin_list:
+        print(com.count(coin), end=' ')
+    print()
