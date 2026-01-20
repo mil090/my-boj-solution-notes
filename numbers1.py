@@ -181,3 +181,55 @@ for idx in range(N):
     if len(factors)==2:
         result+=1
 print(result)
+
+# 2581번: 소수
+# 문제
+'''
+자연수 M과 N이 주어질 때 M이상 N이하의 자연수 중 소수인 것을 모두 골라 이들 소수의 
+합과 최솟값을 찾는 프로그램을 작성하시오.
+예를 들어 M=60, N=100인 경우 60이상 100이하의 자연수 중 소수는 61, 67, 71, 73, 
+79, 83, 89, 97 총 8개가 있으므로, 이들 소수의 합은 620이고, 최솟값은 61이 된다.
+'''
+# 입력
+'''
+입력의 첫째 줄에 M이, 둘째 줄에 N이 주어진다.
+M과 N은 10,000이하의 자연수이며, M은 N보다 작거나 같다.
+'''
+# 출력
+'''
+M이상 N이하의 자연수 중 소수인 것을 모두 찾아 첫째 줄에 그 합을, 둘째 줄에 그 중 
+최솟값을 출력한다.
+단, M이상 N이하의 자연수 중 소수가 없을 경우는 첫째 줄에 -1을 출력한다.
+'''
+# 해법
+'''
+1. M과 N을 입력받음. 소수들을 저장할 빈 리스트 prime을 생성
+2. M부터 N까지의 자연수 n에 대하여 n이 소수인지 검사 -> 이를 함수로 해 보자
+3. is_prime(num): num이 소수이면 True, 소수가 아니면 False를 출력하는 함수
+num의 약수들을 저장할 빈 리스트 factors를 생성. 1부터 num까지의 자연수 i에 대하여
+i가 num의 약수이면, 즉 num을 i로 나눈 나머지가 0이면 i를 factors에 추가.
+factors의 길이가 2이면 True, 그렇지 않으면 False를 반환
+4. is_prime(n)이 True이면 n을 prime에 삽입
+5-1. prime에 원소가 없으면, 즉 prime의 길이가 0이면 -1을 출력
+5-2. prime에 원소가 있으면 첫 줄에 prime의 모든 원소의 합, 그 다음 줄에 최솟값을 출력
+'''
+M=int(input())
+N=int(input())
+prime=[]
+def is_prime(num):
+    factors=[]
+    for i in range(1, num+1):
+        if num%i==0:
+            factors.append(i)
+    if len(factors)==2:
+        return True
+    else:
+        return False
+for n in range(M, N+1):
+    if is_prime(n):
+        prime.append(n)
+if len(prime)==0:
+    print(-1)
+else:
+    print(sum(prime))
+    print(min(prime))
