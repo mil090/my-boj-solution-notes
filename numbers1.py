@@ -143,3 +143,41 @@ while True:
         print(result)
     else:
         print(f'{n} is NOT perfect.')
+
+# 1978번: 소수 찾기
+# 문제
+'''
+주어진 수 N개 중에서 소수가 몇 개인지 찾아서 출력하는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+첫 줄에 수의 개수 N이 주어진다. N은 100이하이다. 다음으로 N개의 수가 주어지는데 수는 
+1,000 이하의 자연수이다.
+'''
+# 출력
+'''
+주어진 수들 중 소수의 개수를 출력한다.
+'''
+# 해법
+'''
+어떤 자연수가 소수일 필요충분조건: 그 자연수의 약수의 개수가 2
+1. N을 입력받음. 결과로 반환할 변수 result를 생성하여 0으로 초기화
+2. N번 동안 반복문을 진행
+3. 소수인지 판별할 자연수 n을 입력받음. n의 약수를 저장할 리스트 factors를 생성
+4. 1부터 n까지의 자연수 i에 대하여 i가 n의 약수이면, 즉 n을 i로 나눈 나머지가 0이면
+i를 factors에 추가
+5. factors의 길이가 2이면 result에 1을 더함
+6. 반복문이 종료되면 result를 출력
+'''
+N=int(input())
+result=0
+numbers=list(map(int, input().split()))
+for idx in range(N):
+    n=numbers[idx]
+    factors=[]
+    for i in range(1, n+1):
+        if n%i==0:
+            factors.append(i)
+    if len(factors)==2:
+        result+=1
+print(result)
