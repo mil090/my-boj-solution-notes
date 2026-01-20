@@ -3,15 +3,10 @@
 # 문제
 '''
 4 * 3 = 12이다.
-
 이 식을 통해 다음과 같은 사실을 알 수 있다.
-
 3은 12의 약수이고, 12는 3의 배수이다.
-
 4도 12의 약수이고, 12는 4의 배수이다.
-
 두 수가 주어졌을 때, 다음 3가지 중 어떤 관계인지 구하는 프로그램을 작성하시오.
-
 첫 번째 숫자가 두 번째 숫자의 약수이다.
 첫 번째 숫자가 두 번째 숫자의 배수이다.
 첫 번째 숫자가 두 번째 숫자의 약수와 배수 모두 아니다.
@@ -92,6 +87,20 @@ try:
     print(factors[K-1])
 except:
     print(0)
+# 시간 복잡도를 줄여서 다시 작성해 보면?
+from math import sqrt
+N, K=map(int, input().split())
+factors=[]
+for i in range(1, int(sqrt(N))+1):
+    if N%i==0:
+        factors.append(i)
+        if i!=N//i:
+            factors.append(N//i)
+factors.sort()
+try:
+    print(factors[K-1])
+except:
+    print(0)
 
 # 9506번: 약수들의 합
 # 문제
@@ -143,6 +152,29 @@ while True:
         print(result)
     else:
         print(f'{n} is NOT perfect.')
+# 시간 복잡도를 줄여서 다시 작성해 보면?
+from math import sqrt
+while True:
+    n=int(input())
+    if n==-1:
+        break
+    factors=[]
+    for i in range(1, int(sqrt(n))+1):
+        if n%i==0:
+            factors.append(i)
+            if i!=1 and i!=n//i:
+                factors.append(n//i)
+    factors.sort()
+    if n==sum(factors):
+        result=''
+        result+=f'{n} = '
+        for f in factors:
+            result+=f'{f}'
+            if f!=max(factors):
+                result+=' + '
+        print(result)
+    else:
+        print(f'{n} is NOT perfect.')
 
 # 1978번: 소수 찾기
 # 문제
@@ -179,6 +211,28 @@ for idx in range(N):
         if n%i==0:
             factors.append(i)
     if len(factors)==2:
+        result+=1
+print(result)
+# 시간 복잡도를 줄여서 다시 작성해 보면?
+'''
+소수 판별법
+2 이상의 자연수 N에 대하여, sqrt(N)보다 크지 않은 자연수 중 어느 하나라도 N의 약수
+라면, N은 소수가 아니다.
+'''
+from math import sqrt
+N=int(input())
+result=0
+numbers=list(map(int, input().split()))
+def is_prime(n):
+    if n<2:
+        return False
+    else:
+        for i in range(2, int(sqrt(n))+1):
+            if n%i==0:
+                return False
+        return True
+for idx in range(N):
+    if is_prime(numbers[idx]):
         result+=1
 print(result)
 
@@ -233,3 +287,117 @@ if len(prime)==0:
 else:
     print(sum(prime))
     print(min(prime))
+# 시간 복잡도를 줄여서 다시 작성해 보면?
+from math import sqrt
+def is_prime(n):
+    if n<2:
+        return False
+    else:
+        for i in range(2, int(sqrt(n))+1):
+            if n%i==0:
+                return False
+        return True
+M=int(input())
+N=int(input())
+prime=[]
+for n in range(M, N+1):
+    if is_prime(n):
+        prime.append(n)
+if len(prime)==0:
+    print(-1)
+else:
+    print(sum(prime))
+    print(min(prime))
+
+# 11653번: 소인수분해
+# 문제
+'''
+정수 N이 주어졌을 때, 소인수분해하는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+첫째 줄에 정수 N (1 ≤ N ≤ 10,000,000)이 주어진다.
+'''
+# 출력
+'''
+N의 소인수분해 결과를 한 줄에 하나씩 오름차순으로 출력한다. N이 1인 경우 아무것도 
+출력하지 않는다.
+'''
+# 해법
+'''
+1. N을 입력받음. 소인수분해 결과를 저장할 빈 리스트 result를 생성
+만약 N이 1일 경우, None을 반환
+2. N의 1을 제외한 약수들을 저장할 리스트 factors를 생성
+3. is_factor(a, n): a가 n의 약수이면 True, 그렇지 않으면 False를 반환하는 함수
+n을 a로 나눈 나머지가 0이면 True, 0이 아니면 False를 반환
+4. 1부터 N까지의 자연수 i에 대하여 i가 N의 약수이면 factors에 i를 삽입
+5. 위 반복문이 끝나면, factors에는 N의 약수들이 오름차순으로 정렬되어 있음
+6. current를 N으로 초기화
+7. factors의 각 원소 f에 대하여 f가 current의 약수인 동안 아래 문장들을 실행
+result에 f를 추가
+current의 값을 current//f로 대체
+8. result의 원소들을 한 줄 간격으로 출력
+'''
+def is_factor(a: int, n: int) -> bool:
+    if n%a==0:
+        return True
+    else:
+        return False
+def prime_factorize(num: int) -> list:
+    result=[]
+    if num==1:
+        return result
+    factors=[]
+    for i in range(2, num+1):
+        if is_factor(i, num):
+            factors.append(i)
+    current=num
+    for f in factors:
+        while is_factor(f, current):
+            result.append(f)
+            current//=f
+    return result
+N=int(input())
+r=prime_factorize(N)
+for fac in r:
+    print(fac)
+# 시간 복잡도를 줄여서 다시 작성해 보면?
+from math import sqrt
+def is_factor(a: int, n: int) -> bool:
+    if n%a==0:
+        return True
+    else:
+        return False
+def prime_factorize(num: int) -> list:
+    result=[]
+    if num==1:
+        return result
+    factors=[]
+    for i in range(2, int(sqrt(num))+1):
+        if is_factor(i, num):
+            factors.append(i)
+            if i!=num//i:
+                factors.append(num//i)
+    factors.append(num)
+    factors.sort()
+    current=num
+    for f in factors:
+        while is_factor(f, current):
+            result.append(f)
+            current//=f
+    return result
+N=int(input())
+r=prime_factorize(N)
+for fac in r:
+    print(fac)
+
+# 참고사항: 약수/배수 관련 알고리즘의 시간 복잡도를 줄이는 방법
+'''
+어떤 자연수 N의 약수를 구할 때 굳이 N까지 모두 검사할 필요는 없다. N의 약수는 항상
+sqrt(N)을 기준으로 한 쌍으로 존재하기 때문에, N이 소수인지 판별하거나 N의 약수를
+구할 때에는 N까지 볼 필요 없이 sqrt(N)까지, 즉 sqrt(N)보다 크지 않은 자연수까지만
+확인해도 충분하다.
+sqrt(N)보다 크지 않은 N의 모든 약수들을 구하면, sqrt(N)보다 큰 모든 약수들은 앞에서
+구한 약수들과 짝을 이루기 때문(N//f)
+이 사실을 이용하여 각 알고리즘의 시간 복잡도를 줄여 보자
+'''
