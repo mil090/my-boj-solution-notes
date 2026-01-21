@@ -249,3 +249,51 @@ elif A==B or B==C or C==A:
 else:
     result='Scalene'
 print(result)
+
+# 5073번: 삼각형과 세 변
+# 문제
+'''
+삼각형의 세 변의 길이가 주어질 때 변의 길이에 따라 다음과 같이 정의한다.
+Equilateral :  세 변의 길이가 모두 같은 경우
+Isosceles : 두 변의 길이만 같은 경우
+Scalene : 세 변의 길이가 모두 다른 경우
+단 주어진 세 변의 길이가 삼각형의 조건을 만족하지 못하는 경우에는 "Invalid" 를 
+출력한다. 예를 들어 6, 3, 2가 이 경우에 해당한다. 가장 긴 변의 길이보다 나머지 두 
+변의 길이의 합이 길지 않으면 삼각형의 조건을 만족하지 못한다.
+세 변의 길이가 주어질 때 위 정의에 따른 결과를 출력하시오.
+'''
+# 입력
+'''
+각 줄에는 1,000을 넘지 않는 양의 정수 3개가 입력된다. 
+마지막 줄은 0 0 0이며 이 줄은 계산하지 않는다.
+'''
+# 출력
+'''
+각 입력에 맞는 결과 (Equilateral, Isosceles, Scalene, Invalid) 를 출력하시오.
+'''
+# 해법
+'''
+삼각형의 성립 조건: 가장 긴 변이 나머지 두 변의 합보다 작아야 함
+1. while True로 무한 루프를 생성
+2. 세 변 a, b, c를 입력받음. 만약 a, b, c가 모두 0일 경우 break로 반복문을 탈출
+3. 삼각형의 성립 조건 검사. 가장 긴 변은 max(a, b, c), 나머지 두 변의 합은
+sum([a, b, c])-max(a, b, c)임. 만약 삼각형의 성립 조건을 만족하지 않는다면
+Invalid를 출력
+4. 삼각형의 성립 조건을 만족한다면, 어떤 삼각형인지 검사
+4-1. 만약 a, b, c가 모두 같다면 Equilateral를 출력
+4-2. 4-1이 아니고 a, b, c 중 어느 두 개가 같다면 Isosceles를 출력
+4-3. 4-2가 아니면 Scalene을 출력
+'''
+while True:
+    a, b, c=map(int, input().split())
+    if a==b==c==0:
+        break
+    if max(a, b, c)>=sum([a, b, c])-max(a, b, c):
+        result='Invalid'
+    elif a==b==c:
+        result='Equilateral'
+    elif a==b or b==c or c==a:
+        result='Isosceles'
+    else:
+        result='Scalene'
+    print(result)
