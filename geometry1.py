@@ -208,3 +208,44 @@ for _ in range(N):
     x.append(i)
     y.append(j)
 print((max(x)-min(x))*(max(y)-min(y)))
+
+# 10101번: 삼각형 외우기
+# 문제
+'''
+창영이는 삼각형의 종류를 잘 구분하지 못한다. 따라서 프로그램을 이용해 이를 외우려고 한다.
+삼각형의 세 각을 입력받은 다음,
+세 각의 크기가 모두 60이면, Equilateral
+세 각의 합이 180이고, 두 각이 같은 경우에는 Isosceles
+세 각의 합이 180이고, 같은 각이 없는 경우에는 Scalene
+세 각의 합이 180이 아닌 경우에는 Error
+를 출력하는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+총 3개의 줄에 걸쳐 삼각형의 각의 크기가 주어진다. 모든 정수는 0보다 크고, 180보다 작다.
+'''
+# 출력
+'''
+문제의 설명에 따라 Equilateral, Isosceles, Scalene, Error 중 하나를 출력한다.
+'''
+# 해법
+'''
+1. 삼각형의 세 각 A, B, C를 입력받음
+2. Error 조건: A+B+C의 값이 180이 아니면 Error를 출력
+3. 세 각의 합이 180이면 정삼각형, 이등변삼각형, 부등변삼각형 중 하나로 정의
+3-1. A, B, C가 모두 60이면 Equilateral을 출력
+3-2. 3-1이 아니고 세 각 중 어느 두 개가 같으면 Isosceles를 출력
+3-3. 3-2가 아니면 Scalene을 출력
+'''
+A=int(input())
+B=int(input())
+C=int(input())
+if A+B+C!=180:
+    result='Error'
+elif A==B==C==60:
+    result='Equilateral'
+elif A==B or B==C or C==A:
+    result='Isosceles'
+else:
+    result='Scalene'
+print(result)
