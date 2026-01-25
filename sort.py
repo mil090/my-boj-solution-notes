@@ -237,3 +237,38 @@ for _ in range(N):
     numbers.append(int(stdin.readline()))
 numbers.sort()
 print('\n'.join(map(str, numbers)))
+
+# 10989번: 수 정렬하기 3
+# 문제
+'''
+N개의 수가 주어졌을 때, 이를 오름차순으로 정렬하는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+첫째 줄에 수의 개수 N(1 ≤ N ≤ 10,000,000)이 주어진다. 둘째 줄부터 N개의 줄에는 
+수가 주어진다. 이 수는 10,000보다 작거나 같은 자연수이다.
+'''
+# 출력
+'''
+첫째 줄부터 N개의 줄에 오름차순으로 정렬한 결과를 한 줄에 하나씩 출력한다.
+'''
+# 해법
+'''
+지난 두 문제(2750, 2751)와 다른 점은, 입력되는 숫자가 중복될 수 있다는 것(입력 
+부분을 읽어 보면, 앞 두 문제와는 달리 수가 중복되지 않는다는 말이 없음)
+-> 계수 정렬을 이용
+1. 모든 원소가 0이고 길이가 10000인 리스트 counts를 생성
+2. N을 입력받음
+3. N개의 줄에 걸쳐 자연수 n을 입력받음
+4. counts[n-1]의 값을 1 증가시킴
+5. 0부터 9999까지의 자연수 i에 대하여 counts[i]의 값이 k일 때, i+1을 k번 출력
+이때, 효율 증대를 위해 print 함수 대신 sys.stdout.write 함수를 사용
+'''
+from sys import stdin, stdout
+counts=[0 for _ in range(10000)]
+N=int(stdin.readline())
+for _ in range(N):
+    counts[int(stdin.readline())-1]+=1
+for i in range(len(counts)):
+    for _ in range(counts[i]):
+        stdout.write(str(i+1)+'\n')
