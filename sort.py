@@ -272,3 +272,35 @@ for _ in range(N):
 for i in range(len(counts)):
     for _ in range(counts[i]):
         stdout.write(str(i+1)+'\n')
+
+# 1427번: 소트인사이드
+# 문제
+'''
+배열을 정렬하는 것은 쉽다. 수가 주어지면, 그 수의 각 자리수를 내림차순으로 정렬해보자.
+'''
+# 입력
+'''
+첫째 줄에 정렬하려고 하는 수 N이 주어진다. N은 1,000,000,000보다 작거나 같은 자연수이다.
+'''
+# 출력
+'''
+첫째 줄에 자리수를 내림차순으로 정렬한 수를 출력한다.
+'''
+# 해법
+'''
+1. 정렬할 자연수를 문자열 s_N으로 입력받음
+2. s_N을 토큰화하여 리스트 s_digits에 저장
+3. s_digits의 모든 원소들을 정수형으로 변환한 리스트 digits를 생성
+4. digits를 내림차순으로 정렬
+5. 결과로 반환할 빈 문자열 result를 생성
+6. result에 digit의 각 원소를 순서대로 더함(문자열 포매팅 이용)
+7. result를 정수형으로 변환하여 출력
+'''
+s_N=input()
+s_digits=list(s_N)
+digits=list(map(int, s_digits))
+digits.sort(reverse=True)
+result=''
+for d in digits:
+    result+=f'{d}'
+print(int(result))
