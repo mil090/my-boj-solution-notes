@@ -304,3 +304,60 @@ result=''
 for d in digits:
     result+=f'{d}'
 print(int(result))
+
+# 11650번: 좌표 정렬하기
+# 문제
+'''
+2차원 평면 위의 점 N개가 주어진다. 좌표를 x좌표가 증가하는 순으로, x좌표가 같으면 
+y좌표가 증가하는 순서로 정렬한 다음 출력하는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+첫째 줄에 점의 개수 N (1 ≤ N ≤ 100,000)이 주어진다. 둘째 줄부터 N개의 줄에는 
+i번점의 위치 xi와 yi가 주어진다. (-100,000 ≤ xi, yi ≤ 100,000) 좌표는 항상 
+정수이고, 위치가 같은 두 점은 없다.
+'''
+# 출력
+'''
+첫째 줄부터 N개의 줄에 점을 정렬한 결과를 출력한다.
+'''
+# 해법
+'''
+리스트의 정렬 함수 sort의 인자 key
+정렬의 기준이 되는 함수를 설정 가능. 예를 들어 숫자로 이루어진 리스트를 정렬할 때
+key로 abs를 설정하면 절댓값이 작은 순서대로 정렬함
+익명 함수(람다 함수)를 이용하여 구체적인 정렬 기준을 정할 수 있음. 리스트의 각 원소가
+2개의 숫자로 이루어진 리스트일 때, 그 합이 큰 순서대로 정렬하고 싶다면
+lambda x: x[0]+x[1]이 key 함수의 기능을 함
+1. N을 입력받음. 좌표들을 저장할 빈 리스트 coordinates를 생성
+2. N개의 줄에 걸쳐 x좌표와 y좌표를 입력받음. 이 두 좌표로 이루어진 리스트를
+coordinates에 삽입
+3. coordinates를 정렬. key로는 리스트의 첫 번째 원소와 두 번째 요소를 튜플 형태로
+반환하는 람다 함수를 이용. 이렇게 입력하면, 먼저 리스트의 첫 번째 요소를 기준으로 정렬한
+다음, 두 번째 요소를 기준으로 정렬하게 됨
+4. 정렬된 결과를 형식에 맞게 출력
+'''
+import sys
+N=int(sys.stdin.readline())
+coordinates=[]
+for _ in range(N):
+    c=list(map(int, sys.stdin.readline().split()))
+    coordinates.append(c)
+coordinates.sort(key=lambda x: (x[0], x[1]))
+for coor in coordinates:
+    print(coor[0], coor[1])
+# 정보: 튜플은 정렬 함수를 실행할 경우 알아서 맨 처음 요소부터 비교하여 정렬
+l=[(3, 4), (1, 1), (1, -1), (2, 2), (3, 3)]
+l.sort()
+for i in l:
+    print(i[0], i[1])
+# 튜플을 이용하여 효율을 늘리면?
+import sys
+N=int(sys.stdin.readline())
+coordinates=[]
+for _ in range(N):
+    c=tuple(map(int, sys.stdin.readline().split()))
+    coordinates.append(c)
+coordinates.sort()
+for coor in coordinates:
+    print(coor[0], coor[1])
