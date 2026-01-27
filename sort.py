@@ -394,3 +394,46 @@ for _ in range(N):
 coordinates.sort(key=lambda x: (x[1], x[0]))
 for coor in coordinates:
     print(coor[0], coor[1])
+
+# 1181번: 단어 정렬
+# 문제
+'''
+알파벳 소문자로 이루어진 N개의 단어가 들어오면 아래와 같은 조건에 따라 정렬하는 
+프로그램을 작성하시오.
+1. 길이가 짧은 것부터
+2. 길이가 같으면 사전 순으로
+단, 중복된 단어는 하나만 남기고 제거해야 한다.
+'''
+# 입력
+'''
+첫째 줄에 단어의 개수 N이 주어진다. (1 ≤ N ≤ 20,000) 둘째 줄부터 N개의 줄에 걸쳐 
+알파벳 소문자로 이루어진 단어가 한 줄에 하나씩 주어진다. 주어지는 문자열의 길이는 50을 
+넘지 않는다.
+'''
+# 출력
+'''
+조건에 따라 정렬하여 단어들을 출력한다.
+'''
+# 해법
+'''
+Python에서는 문자열 간의 대소 비교도 가능
+1. N을 입력받음. 단어를 입력받을 빈 집합 words를 생성
+2. N개의 줄에 걸쳐 단어를 입력받아 words에 저장하고, words를 집합으로 변환
+3. 중복된 단어를 없앤 후 다시 리스트로 변환한 words를 정렬 -> 기수 정렬 매커니즘
+낮은 우선순위에 따라 먼저 정렬하고, 순차적으로 우선순위를 높임
+먼저 사전식으로 정렬
+그 다음으로 길이 순으로 정렬. 이렇게 하면 길이가 같은 단어에 대해서는 사전식 정렬이 유지
+4. 정렬 결과를 출력
+'''
+import sys
+N=int(sys.stdin.readline())
+words=set()
+for _ in range(N):
+    words.add(sys.stdin.readline().strip())
+words=list(words)
+words.sort()
+words.sort(key=len)
+for w in words:
+    print(w)
+# 정보: input과 달리 sys.stdin.readline은 입력받을 때 기본적으로 줄 바꿈 기호가
+# 뒤에 따라 붙는다
