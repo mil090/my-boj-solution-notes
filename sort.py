@@ -475,3 +475,54 @@ for _ in range(N):
 users.sort(key=lambda x: x[0])
 for u in users:
     print(u[0], u[1])
+
+# 18870번: 좌표 압축
+# 문제
+'''
+수직선 위에 N개의 좌표 X1, X2, ..., XN이 있다. 이 좌표에 좌표 압축을 적용하려고 한다.
+Xi를 좌표 압축한 결과 X'i의 값은 Xi > Xj를 만족하는 서로 다른 좌표 Xj의 개수와 같아야 한다.
+X1, X2, ..., XN에 좌표 압축을 적용한 결과 X'1, X'2, ..., X'N를 출력해보자.
+'''
+# 입력
+'''
+첫째 줄에 N이 주어진다.
+둘째 줄에는 공백 한 칸으로 구분된 X1, X2, ..., XN이 주어진다.
+'''
+# 출력
+'''
+첫째 줄에 X'1, X'2, ..., X'N을 공백 한 칸으로 구분해서 출력한다.
+'''
+# 해법
+'''
+1. N을 입력받음
+2. 압축할 좌표 N개를 입력받아 리스트 coordinates로 저장
+3. coordinates의 사본 copy_coor를 생성
+4. copy_coor를 정렬
+5. coordinates의 각 원소 coor에 대하여 copy_coor.index(coor)가 coor의 좌표
+압축 결과가 됨
+'''
+import sys
+N=int(sys.stdin.readline())
+coordinates=list(map(int, sys.stdin.readline().split()))
+copy_coor=coordinates.copy()
+copy_coor.sort()
+result=''
+for coor in coordinates:
+    result+=f'{copy_coor.index(coor)} '
+print(result.strip())
+# 시간 초과. 다른 방법을 생각해 보자
+'''
+1. N을 입력받음
+2. 압축할 좌표 N개를 입력받아 리스트 coordinates로 저장
+3. set을 이용하여 중복 값을 없앤 다음, 다시 리스트로 만들어 coordinates를 정렬
+4. 빈 딕셔너리 order를 생성
+5. order의 key를 coordinates의 좌표로, value를 인덱스로 지정하여 삽입
+6. order의 values를 key 순서대로 출력
+'''
+import sys
+N=int(sys.stdin.readline())
+coordinates=list(map(int, sys.stdin.readline().split()))
+unique_coor=list(set(coordinates))
+unique_coor.sort()
+rank_dict={value: index for index, value in enumerate(unique_coor)}
+print(' '.join(str(rank_dict[coor]) for coor in coordinates))
