@@ -283,3 +283,83 @@ for _ in range(M):
         print(num_pokemon[problem])
     except:
         print(pokemon_num[problem])
+
+# 10816번: 숫자 카드 2
+# 문제
+'''
+숫자 카드는 정수 하나가 적혀져 있는 카드이다. 상근이는 숫자 카드 N개를 가지고 있다. 
+정수 M개가 주어졌을 때, 이 수가 적혀있는 숫자 카드를 상근이가 몇 개 가지고 있는지 
+구하는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+첫째 줄에 상근이가 가지고 있는 숫자 카드의 개수 N(1 ≤ N ≤ 500,000)이 주어진다. 
+둘째 줄에는 숫자 카드에 적혀있는 정수가 주어진다. 숫자 카드에 적혀있는 수는 
+-10,000,000보다 크거나 같고, 10,000,000보다 작거나 같다.
+셋째 줄에는 M(1 ≤ M ≤ 500,000)이 주어진다. 넷째 줄에는 상근이가 몇 개 가지고 있는 
+숫자 카드인지 구해야 할 M개의 정수가 주어지며, 이 수는 공백으로 구분되어져 있다. 
+이 수도 -10,000,000보다 크거나 같고, 10,000,000보다 작거나 같다.
+'''
+# 출력
+'''
+첫째 줄에 입력으로 주어진 M개의 수에 대해서, 각 수가 적힌 숫자 카드를 상근이가 몇 개 
+가지고 있는지를 공백으로 구분해 출력한다.
+'''
+# 해법
+'''
+1. N을 입력받음
+2. N개의 숫자를 입력받아 리스트 cards로 저장
+3. M을 입력받음
+4. M개의 숫자를 입력받아 리스트 numbers로 저장
+5. 빈 리스트 result를 생성
+6. numbers의 각 원소별로, cards에서 그 원소의 개수를 구하여 result에 추가
+7. result의 원소들을 공백 간격으로 출력
+'''
+import sys
+N=int(sys.stdin.readline())
+cards=sys.stdin.readline().split()
+M=int(sys.stdin.readline())
+numbers=sys.stdin.readline().split()
+result=[]
+for n in numbers:
+    result.append(cards.count(n))
+print(' '.join(map(str, result)))
+# 시간 초과 발생. 효율을 더 높여야 함
+'''
+딕셔너리를 이용하여 연산 시간을 줄여 본다면?
+'''
+import sys
+N=int(sys.stdin.readline())
+cards=list(map(int, sys.stdin.readline().split()))
+M=int(sys.stdin.readline())
+numbers=list(map(int, sys.stdin.readline().split()))
+result={}
+for n in numbers:
+    result[n]=cards.count(n)
+for n in numbers:
+    print(result[n], end=' ')
+# 이번에도 시간 초과. 좀 더 빠른 방법은?
+'''
+1. result를 numbers의 각 원소를 key, 모든 value가 0인 딕셔너리로 초기화
+2. cards의 각 원소 c에 대하여, 아래 try-except문을 실행
+result[c]+=1을 실행
+만약 위 연산이 정상적으로 실행된다면, c는 numbers에 있는 숫자
+만약 위 연산에서 오류(KeyError)가 발생한다면, c는 numbers에 없는 숫자이므로 이 
+숫자는 결과에 영향을 주지 않음. 따라서 아무런 작업을 할 필요가 없음
+3. numbers의 각 원소 n에 대하여 result[n]의 값을 공백 간격으로 출력
+'''
+import sys
+N=int(sys.stdin.readline())
+cards=list(map(int, sys.stdin.readline().split()))
+M=int(sys.stdin.readline())
+numbers=list(map(int, sys.stdin.readline().split()))
+result={}
+for n in numbers:
+    result[n]=0
+for c in cards:
+    try:
+        result[c]+=1
+    except KeyError:
+        pass
+for n in numbers:
+    print(result[n], end=' ')
