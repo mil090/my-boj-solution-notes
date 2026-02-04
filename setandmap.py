@@ -363,3 +363,57 @@ for c in cards:
         pass
 for n in numbers:
     print(result[n], end=' ')
+
+# 1764번: 듣보잡
+# 문제
+'''
+김진영이 듣도 못한 사람의 명단과, 보도 못한 사람의 명단이 주어질 때, 듣도 보도 못한 
+사람의 명단을 구하는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+첫째 줄에 듣도 못한 사람의 수 N, 보도 못한 사람의 수 M이 주어진다. 이어서 둘째 줄부터 
+N개의 줄에 걸쳐 듣도 못한 사람의 이름과, N+2째 줄부터 보도 못한 사람의 이름이 순서대로 
+주어진다. 이름은 띄어쓰기 없이 알파벳 소문자로만 이루어지며, 그 길이는 20 이하이다. 
+N, M은 500,000 이하의 자연수이다.
+듣도 못한 사람의 명단에는 중복되는 이름이 없으며, 보도 못한 사람의 명단도 마찬가지이다.
+'''
+# 출력
+'''
+듣보잡의 수와 그 명단을 사전순으로 출력한다.
+'''
+# 해법
+'''
+1. N과 M을 입력받음. 듣도 못한 사람과 보도 못한 사람의 목록을 저장할 빈 집합 hear,
+see를 생성
+2. N개의 줄에 걸쳐 듣도 못한 사람의 이름을 입력받아 hear에 저장
+3. M개의 줄에 걸쳐 보도 못한 사람의 이름을 입력받아 see에 저장
+4. hear과 see의 교집합을 리스트 형태로 변환하여 result로 저장
+5. result를 정렬
+6. result의 길이를 출력하고, 그 다움 줄부터 result의 원소들을 한 줄에 하나씩 출력
+'''
+N, M=map(int, input().split())
+hear=set()
+see=set()
+for _ in range(N):
+    hear.add(input())
+for _ in range(M):
+    see.add(input())
+result=list(hear.intersection(see))
+result.sort()
+print(len(result))
+for r in result:
+    print(r)
+# 알고리즘의 효율을 높여 보자
+import sys
+N, M=map(int, sys.stdin.readline().split())
+hear=set()
+see=set()
+for _ in range(N):
+    hear.add(sys.stdin.readline().rstrip())
+for _ in range(M):
+    see.add(sys.stdin.readline().rstrip())
+result=list(hear.intersection(see))
+result.sort()
+print(len(result))
+print('\n'.join(result))
