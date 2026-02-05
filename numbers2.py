@@ -181,3 +181,83 @@ result=0
 for i in intervals:
     result+=i//G-1
 print(result)
+
+# 4134번: 다음 소수
+# 문제
+'''
+정수 n(0 ≤ n ≤ 4*109)가 주어졌을 때, n보다 크거나 같은 소수 중 가장 작은 소수를 
+찾는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+첫째 줄에 테스트 케이스의 개수가 주어진다. 각 테스트 케이스는 한 줄로 이루어져 있고, 
+정수 n이 주어진다.
+'''
+# 출력
+'''
+각각의 테스트 케이스에 대해서 n보다 크거나 같은 소수 중 가장 작은 소수를 한 줄에 하나씩 
+출력한다.
+'''
+# 해법
+'''
+0. math 모듈에서 sqrt와 floor 함수를 호출. floor는 가우스 함수의 기능을 함(입력받은
+수보다 크지 않은 최대 정수를 출력)
+1. T를 입력받음
+2. 어떤 자연수 N이 소수인지 판별하는 함수 is_prime(N)을 구현
+N이 2보다 작으면 N은 소수가 아니므로 False를 반환
+N이 2 이상이면, 2부터 floor(sqrt(N))까지의 자연수 num에 대하여 num이 N의 약수인지,
+즉 N%num의 값이 0인지 검사. 만약 어느 하나라도 이 값이 0이 된다면, N은 소수가 아니므로
+False를 반환. 모든 num에 대하여 위 나머지가 0이 아니라면, N은 소수이므로 True를 반환
+3. 각 줄에 대하여 n을 입력받음
+4. n이 소수가 아닌 동안, 즉 is_prime(n)이 False인 동안 n을 1씩 증가시킴
+5. 위 while문이 종료되면 n을 출력
+'''
+import sys
+from math import sqrt, floor
+def is_prime(N: int):
+    if N<2:
+        return False
+    for num in range(2, floor(sqrt(N))+1):
+        if N%num==0:
+            return False
+    return True
+T=int(sys.stdin.readline())
+for _ in range(T):
+    n=int(sys.stdin.readline())
+    while not is_prime(n):
+        n+=1
+    print(n)
+# 약 1168ms로 많은 시간이 소요됨. 효율을 조금 더 개선해 보자
+'''
+2를 제외한 짝수는 굳이 소수 여부를 검사할 필요가 없음
+'''
+import sys
+from math import sqrt, floor
+def is_prime(N: int):
+    if N<2:
+        return False
+    elif N==2:
+        return True
+# N이 2가 아닌 짝수이면 소수가 아니므로 False를 반환
+    elif N%2==0:
+        return False
+# N이 홀수라면, 3부터 sqrt(N)까지의 정수 중 홀수만을 대상으로 N의 약수인지 검사
+    else:
+        for num in range(3, floor(sqrt(N))+1, 2):
+            if N%num==0:
+                return False
+        return True
+T=int(sys.stdin.readline())
+for _ in range(T):
+    n=int(sys.stdin.readline())
+# 만약 n이 2 이하이면 n보다 크거나 같은 가장 작은 소수는 2이므로 2를 출력
+    if n<=2:
+        print(2)
+        continue
+# n이 2보다 큰 짝수이면 1을 더하여 홀수부터 소수 여부를 검사하도록 조정
+    if n%2==0:
+        n+=1
+# n이 소수가 아닌 동안 2씩 더함(2보다 큰 모든 짝수는 소수가 아니므로 검사하지 않음)
+    while not is_prime(n):
+        n+=2
+    print(n)
