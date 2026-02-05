@@ -261,3 +261,76 @@ for _ in range(T):
     while not is_prime(n):
         n+=2
     print(n)
+
+# 1929번: 소수 구하기
+# 문제
+'''
+M이상 N이하의 소수를 모두 출력하는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+첫째 줄에 자연수 M과 N이 빈 칸을 사이에 두고 주어진다. (1 ≤ M ≤ N ≤ 1,000,000) 
+M이상 N이하의 소수가 하나 이상 있는 입력만 주어진다.
+'''
+# 출력
+'''
+한 줄에 하나씩, 증가하는 순서대로 소수를 출력한다.
+'''
+# 해법
+'''
+위에서 구한 소수 판독 함수 is_prime(N)을 이용해 보자
+1. M, N을 입력받음. 소수들을 저장할 빈 리스트 result를 생성
+2. M 이상 N 이하인 각 자연수 num에 대하여 num이 소수인지 검사. 만약 소수라면 num을
+result에 삽입
+3. result의 각 원소들을 공백 간격으로 출력
+'''
+from math import sqrt, floor
+def is_prime(N: int):
+    if N<2:
+        return False
+    elif N==2:
+        return True
+    elif N%2==0:
+        return False
+    else:
+        for num in range(3, floor(sqrt(N))+1, 2):
+            if N%num==0:
+                return False
+        return True
+M, N=map(int, input().split())
+result=[]
+for num in range(M, N+1):
+    if is_prime(num):
+        result.append(str(num))
+print('\n'.join(result))
+# 연산 시간이 1760ms로 상당히 비효율적. 효율을 개선해 보자
+'''
+에라토스테네스의 체를 구현하여 1 이상 1000000 이하의 소수들을 모두 찾아내고, 이들
+중에서 M 이상 N 이하인 부분만 슬라이싱하자
+에라토스테네스의 체를 구현하기 위한 함수 sieve(n)
+길이가 n+1인 리스트 is_prime을 생성하여 모든 원소를 True로 초기화. 각 원소는 해당
+인덱스가 소수인지 나타내는 bool값
+0과 1은 소수가 아니므로 is_prime[0]과 is_prime[1]을 모두 False로 대체
+2 이상 floor(sqrt(n)) 이하의 정수 num에 대하여 num이 소수이면, 즉 is_prime[num]
+이 True이면 num의 배수에 해당하는 인덱스의 원소들을 모두 False로 대체
+위 과정이 종료되면 True에 해당하는 인덱스들을 반환
+'''
+from math import sqrt, floor
+def sieve(n: int):
+    is_prime=[True]*(n+1)
+    is_prime[0]=is_prime[1]=False
+    for i in range(2, floor(sqrt(n))+1):
+        if is_prime[i]:
+            for j in range(i*i, n+1, i):
+                is_prime[j]=False
+    return [i for i, prime in enumerate(is_prime) if prime]
+p=sieve(10**6)
+M, N=map(int, input().split())
+start=0
+while p[start]<M:
+    start+=1
+stop=len(p)-1
+while p[stop]>N:
+    stop-=1
+print('\n'.join(map(str, p[start:stop+1])))
+# 연산 시간이 176ms로 10분의 1로 줄었다!!
