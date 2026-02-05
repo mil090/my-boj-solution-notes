@@ -76,3 +76,53 @@ def euc_gcd(a: int, b: int):
     else:
         return euc_gcd(b, a%b)
 print(A*B//euc_gcd(max(A, B), min(A, B)))
+
+# 1735번: 분수 합
+# 문제
+'''
+분수 A/B는 분자가 A, 분모가 B인 분수를 의미한다. A와 B는 모두 자연수라고 하자.
+두 분수의 합 또한 분수로 표현할 수 있다. 두 분수가 주어졌을 때, 그 합을 기약분수의 
+형태로 구하는 프로그램을 작성하시오. 기약분수란 더 이상 약분되지 않는 분수를 의미한다.
+'''
+# 입력
+'''
+첫째 줄과 둘째 줄에, 각 분수의 분자와 분모를 뜻하는 두 개의 자연수가 순서대로 주어진다. 
+입력되는 네 자연수는 모두 30,000 이하이다.
+'''
+# 출력
+'''
+첫째 줄에 구하고자 하는 기약분수의 분자와 분모를 뜻하는 두 개의 자연수를 빈 칸을 사이에 
+두고 순서대로 출력한다.
+'''
+# 해법
+'''
+1. math 모듈에서 최대공약수와 최소공배수를 구하는 함수 gcd, lcm을 호출
+2. 두 분수를 입력받음. 각 분자는 numer1, numer2로, 분모는 denom1, denom2로 입력받음
+3. 두 분수의 분모를 통분하기 위해 두 분모의 최소공배수 L을 구함
+4. L을 각 분모로 나눈 몫을 q1, q2라고 하고, 이를 각 분자에 곱하여 합함
+5. 두 분수를 더한 값을 분수로 나타내면 (numer1*q1+numer2*q2)/L
+6. 위 결과에서 분모와 분자의 최대공약수 G를 구하여 각각을 G로 나누고, 그 값을 공백
+간격으로 출력
+'''
+from math import gcd, lcm
+numer1, denom1=map(int, input().split())
+numer2, denom2=map(int, input().split())
+L=lcm(denom1, denom2)
+q1=L//denom1
+q2=L//denom2
+numer=numer1*q1+numer2*q2
+G=gcd(numer, L)
+print(numer//G, L//G)
+# fractions 모듈의 Fraction을 이용하면 보다 간단히 구현할 수 있다
+'''
+Fraction 함수는 분자와 분모를 입력받아 이를 분수 형태로 나타내는 함수
+numerator 변수는 분자를, denominator 변수는 분모를 출력
+Fraction 객체끼리 사칙연산을 수행할 경우, 자동으로 기약분수 형태로 바꾸어 줌
+'''
+from fractions import  Fraction
+numer1, denom1=map(int, input().split())
+numer2, denom2=map(int, input().split())
+frac1=Fraction(numer1, denom1)
+frac2=Fraction(numer2, denom2)
+result=frac1+frac2
+print(result.numerator, result.denominator)
