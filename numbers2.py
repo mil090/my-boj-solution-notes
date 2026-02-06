@@ -433,3 +433,84 @@ while True:
     while p[stop]>2*n:
         stop-=1
     print(len(p[start:stop+1]))
+
+# 17103번: 골드바흐 파티션
+# 문제
+'''
+골드바흐의 추측: 2보다 큰 짝수는 두 소수의 합으로 나타낼 수 있다.
+짝수 N을 두 소수의 합으로 나타내는 표현을 골드바흐 파티션이라고 한다. 짝수 N이 주어졌을 
+때, 골드바흐 파티션의 개수를 구해보자. 두 소수의 순서만 다른 것은 같은 파티션이다.
+'''
+# 입력
+'''
+첫째 줄에 테스트 케이스의 개수 T (1 ≤ T ≤ 100)가 주어진다. 각 테스트 케이스는 한 
+줄로 이루어져 있고, 정수 N은 짝수이고, 2 < N ≤ 1,000,000을 만족한다.
+'''
+# 출력
+'''
+각각의 테스트 케이스마다 골드바흐 파티션의 수를 출력한다.
+'''
+# 해법
+'''
+0. 에라토스테네스의 체 알고리즘을 이용하여 1부터 1000000까지의 자연수 중 모든 소수를
+찾아 리스트 P로 저장
+1. T를 입력받음
+2. T번의 반복문에서 n을 입력받음. 결과로 출력할 변수 result를 생성하여 0으로 초기화
+3. 짝수 n을 두 소수의 합으로 나타낼 경우, 그 두 소수는 항상 n보다 작으므로, p에서
+n 이하인 부분만 슬라이싱하여 변수 primes로 저장
+4. primes는 n 이하의 소수들이 오름차순으로 정렬되어 있음. 이중에서 n//2 이하인 소수
+p에 대하여 n-p가 primes에 있다면 p와 n-p는 n의 골드바흐 파티션이 되므로 result에
+1을 더함. n//2 이하일 때까지만 검사하는 이유는 중복을 막기 위함임
+5. result를 출력
+'''
+import sys
+from math import sqrt, floor
+def sieve(n: int):
+    is_prime=[True]*(n+1)
+    is_prime[0]=is_prime[1]=False
+    for i in range(2, floor(sqrt(n))+1):
+        if is_prime[i]:
+            for j in range(i*i, n+1, i):
+                is_prime[j]=False
+    return [i for i, prime in enumerate(is_prime) if prime]
+P=sieve(10**6)
+T=int(sys.stdin.readline())
+R=[]
+for _ in range(T):
+    n=int(sys.stdin.readline())
+    result=0
+    for p in P:
+        if p>n//2:
+            break
+        if n-p in P:
+            result+=1
+    R.append(str(result))
+print('\n'.join(R))
+# 시간 초과 발생. 효율을 더 높여야 함
+'''
+n-p가 소수인지 확인하는 것은 에라토스테네스의 체로 걸러 낸 결과에 n-p가 있는지 확인하는
+것보다, is_prime[n-p]가 True인지 확인하는 것이 훨씬 빠르다
+'''
+import sys
+from math import sqrt, floor
+def isPrime_and_sieve(n: int):
+    is_prime=[True]*(n+1)
+    is_prime[0]=is_prime[1]=False
+    for i in range(2, floor(sqrt(n))+1):
+        if is_prime[i]:
+            for j in range(i*i, n+1, i):
+                is_prime[j]=False
+    return is_prime, [i for i, prime in enumerate(is_prime) if prime]
+is_prime_list, P=isPrime_and_sieve(10**6)
+T=int(sys.stdin.readline())
+R=[]
+for _ in range(T):
+    n=int(sys.stdin.readline())
+    result=0
+    for p in P:
+        if p>n//2:
+            break
+        if is_prime_list[n-p]:
+            result+=1
+    R.append(str(result))
+print('\n'.join(R))
