@@ -334,3 +334,102 @@ while p[stop]>N:
     stop-=1
 print('\n'.join(map(str, p[start:stop+1])))
 # 연산 시간이 176ms로 10분의 1로 줄었다!!
+
+# 4948번: 베르트랑 공준
+# 문제
+'''
+베르트랑 공준은 임의의 자연수 n에 대하여, n보다 크고, 2n보다 작거나 같은 소수는 적어도 
+하나 존재한다는 내용을 담고 있다.
+이 명제는 조제프 베르트랑이 1845년에 추측했고, 파프누티 체비쇼프가 1850년에 증명했다.
+예를 들어, 10보다 크고, 20보다 작거나 같은 소수는 4개가 있다. (11, 13, 17, 19) 
+또, 14보다 크고, 28보다 작거나 같은 소수는 3개가 있다. (17,19, 23)
+자연수 n이 주어졌을 때, n보다 크고, 2n보다 작거나 같은 소수의 개수를 구하는 프로그램을 
+작성하시오. 
+'''
+# 입력
+'''
+입력은 여러 개의 테스트 케이스로 이루어져 있다. 각 케이스는 n을 포함하는 한 줄로 
+이루어져 있다.
+입력의 마지막에는 0이 주어진다.
+'''
+# 출력
+'''
+각 테스트 케이스에 대해서, n보다 크고, 2n보다 작거나 같은 소수의 개수를 출력한다.
+'''
+# 제한
+'''
+1 ≤ n ≤ 123,456
+'''
+# 해법
+'''
+0. 소수인지 판별하는 함수 is_prime(n)을 구현
+n<2이면 n은 소수가 아니므로 False를 반환
+n=2이면 n은 소수이므로 True를 반환
+n>2이면 소수인지 판별하는 연산을 진행
+먼저 n이 2보다 큰 짝수이면, 즉 n%2=0이면 False를 반환
+n이 3 이상의 홀수이면, 3 이상 floor(sqrt(n)) 이하의 홀수 num 중에서 n의 약수가 
+있는지, 즉 n%num=0인지 검사. num 중 약수가 존재한다면 False, 그렇지 않으면 True
+1. while을 이용하여 무한 루프를 생성
+2. n을 입력받음. n의 값이 0이면 반복문을 탈출
+3. 결과로 출력할 변수 result를 생성하여 0으로 초기화
+4. n이 1이면 1을 출력, n이 2이면 2를 출력
+n이 3 이상일 경우, n+1부터 2*n까지의 자연수 중 짝수인 소수는 없으므로 홀수에 대해서만
+소수 여부를 검사
+n이 3 이상의 홀수이면 반복문을 n부터 시작하고, 3 이상의 짝수이면 반복문을 n+1부터 시작
+2*n은 n의 홀짝에 관계없이 짝수이므로 마지막 홀수는 2*n-1. 따라서 반복문의 end는 2*n
+이 범위 내의 홀수들을 검사하여 소수일 때마다 result에 1을 더함
+5. result를 출력
+'''
+import sys
+from math import sqrt, floor
+def is_prime(N: int):
+    if N<2:
+        return False
+    elif N==2:
+        return True
+    elif N%2==0:
+        return False
+    else:
+        for num in range(3, floor(sqrt(N))+1, 2):
+            if N%num==0:
+                return False
+        return True
+while True:
+    n=int(sys.stdin.readline())
+    if n==0:
+        break
+    result=0
+    if n==1:
+        result=1
+    elif n%2==0:
+        for t in range(n+1, 2*n, 2):
+            if is_prime(t):
+                result+=1
+    else:
+        for t in range(n+2, 2*n, 2):
+            if is_prime(t):
+                result+=1
+    print(result)
+# 연신 시간이 4500ms로 매우 비효율적. 에라토스테네스의 체를 이용하여 미리 구해 두자
+import sys
+from math import sqrt, floor
+def sieve(n: int):
+    is_prime=[True]*(n+1)
+    is_prime[0]=is_prime[1]=False
+    for i in range(2, floor(sqrt(n))+1):
+        if is_prime[i]:
+            for j in range(i*i, n+1, i):
+                is_prime[j]=False
+    return [i for i, prime in enumerate(is_prime) if prime]
+p=sieve(123456*2)
+while True:
+    n=int(sys.stdin.readline())
+    if n==0:
+        break
+    start=0
+    while p[start]<=n:
+        start+=1
+    stop=len(p)-1
+    while p[stop]>2*n:
+        stop-=1
+    print(len(p[start:stop+1]))
