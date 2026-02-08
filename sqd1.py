@@ -174,3 +174,90 @@ for _ in range(T):
     else:
         result.append('NO')
 print('\n'.join(result))
+
+# 4949번: 균형잡힌 세상
+# 문제
+'''
+세계는 균형이 잘 잡혀있어야 한다. 양과 음, 빛과 어둠 그리고 왼쪽 괄호와 오른쪽 괄호처럼 말이다.
+정민이의 임무는 어떤 문자열이 주어졌을 때, 괄호들의 균형이 잘 맞춰져 있는지 판단하는 
+프로그램을 짜는 것이다.
+문자열에 포함되는 괄호는 소괄호("()") 와 대괄호("[]")로 2종류이고, 문자열이 균형을 
+이루는 조건은 아래와 같다.
+모든 왼쪽 소괄호("(")는 오른쪽 소괄호(")")와만 짝을 이뤄야 한다.
+모든 왼쪽 대괄호("[")는 오른쪽 대괄호("]")와만 짝을 이뤄야 한다.
+모든 오른쪽 괄호들은 자신과 짝을 이룰 수 있는 왼쪽 괄호가 존재한다.
+모든 괄호들의 짝은 1:1 매칭만 가능하다. 즉, 괄호 하나가 둘 이상의 괄호와 짝지어지지 않는다.
+짝을 이루는 두 괄호가 있을 때, 그 사이에 있는 문자열도 균형이 잡혀야 한다.
+정민이를 도와 문자열이 주어졌을 때 균형잡힌 문자열인지 아닌지를 판단해보자.
+'''
+# 입력
+'''
+각 문자열은 마지막 글자를 제외하고 영문 알파벳, 공백, 소괄호("( )"), 대괄호("[ ]")로 
+이루어져 있으며, 온점(".")으로 끝나고, 길이는 100글자보다 작거나 같다.
+입력의 종료조건으로 맨 마지막에 온점 하나(".")가 들어온다.
+'''
+# 출력
+'''
+각 줄마다 해당 문자열이 균형을 이루고 있으면 "yes"를, 아니면 "no"를 출력한다.
+'''
+# 해법
+'''
+앞 문제(9012번-괄호)의 두 조건에서 새로운 조건 한 가지가 추가됨
+서로 다른 종류의 괄호가 교차하면 안 됨. 즉 닫는 괄호를 만났을 때, stack의 마지막에
+있는 여는 괄호가 이 닫는 괄호와 같은 종류이어야 함
+1. 입력받은 문자열에 대한 괄호 검사를 수행하는 is_valid(S)를 구현
+스택으로 사용할 빈 리스트 stack을 생성
+S의 각 원소 s에 대하여 s가 여는 괄호 ( 또는 [이면 이를 stack에 삽입
+s가 닫는 괄호 ) 또는 ]이면 유효성 검사를 진행
+만약 stack이 공백 상태이면 여는 괄호 없이 닫는 괄호가 나온 것이므로 False를 반환
+만약 stack의 맨 마지막 원소가 닫는 괄호와 맞지 않으면 다른 종류의 괄호 쌍이 교차한
+것이므로 False를 반환
+stack의 맨 마지막 원소가 닫는 괄호와 맞으면 해당 여는 괄호(마지막 원소)를 stack에서 제거
+위 반복문이 종료되었을 때 stack이 공백 상태가 아니라면 여는 괄호와 닫는 괄호의 수가
+서로 다른 것이므로 False를 반환
+위 조건을 모두 통과하면 True를 반환
+결과를 저장할 빈 리스트 result를 생성
+2. while True로 무한 루프를 생성
+3. 검사할 문자열 sen을 입력받음
+4. sen이 .이면 반복문을 탈출
+5. 우리가 관심 있는 영역은 괄호뿐이므로, 입력받은 문자열에서 괄호만 남김
+6. 괄호 검사 함수 is_valid(sen)을 실행하여 True이면 yes, False이면 no를 result
+에 삽입
+7. result의 원소들을 한 줄에 하나씩 출력
+'''
+import sys
+def is_valid(S: str):
+    stack=[]
+    for s in S:
+        if s in ('(', '['):
+            stack.append(s)
+        elif s==')':
+            if len(stack)==0:
+                return False
+            elif stack[-1]!='(':
+                return False
+            else:
+                r=stack.pop()
+        elif s==']':
+            if len(stack)==0:
+                return False
+            elif stack[-1]!='[':
+                return False
+            else:
+                r=stack.pop()
+    if len(stack)!=0:
+        return False
+    else:
+        return True
+targets='()[]'
+result=[]
+while True:
+    sen=sys.stdin.readline().rstrip('\n')
+    if sen=='.':
+        break
+    brackets=''.join([char for char in sen if char in targets])
+    if is_valid(brackets):
+        result.append('yes')
+    else:
+        result.append('no')
+print('\n'.join(result))
