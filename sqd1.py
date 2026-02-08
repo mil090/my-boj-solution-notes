@@ -335,3 +335,204 @@ if is_valid(L):
     print('Nice')
 else:
     print('Sad')
+
+# 18258번: 큐 2
+# 문제
+'''
+정수를 저장하는 큐를 구현한 다음, 입력으로 주어지는 명령을 처리하는 프로그램을 작성하시오.
+명령은 총 여섯 가지이다.
+push X: 정수 X를 큐에 넣는 연산이다.
+pop: 큐에서 가장 앞에 있는 정수를 빼고, 그 수를 출력한다. 만약 큐에 들어있는 정수가 없는 경우에는 -1을 출력한다.
+size: 큐에 들어있는 정수의 개수를 출력한다.
+empty: 큐가 비어있으면 1, 아니면 0을 출력한다.
+front: 큐의 가장 앞에 있는 정수를 출력한다. 만약 큐에 들어있는 정수가 없는 경우에는 -1을 출력한다.
+back: 큐의 가장 뒤에 있는 정수를 출력한다. 만약 큐에 들어있는 정수가 없는 경우에는 -1을 출력한다.
+'''
+# 입력
+'''
+첫째 줄에 주어지는 명령의 수 N (1 ≤ N ≤ 2,000,000)이 주어진다. 둘째 줄부터 N개의 
+줄에는 명령이 하나씩 주어진다. 주어지는 정수는 1보다 크거나 같고, 100,000보다 작거나 
+같다. 문제에 나와있지 않은 명령이 주어지는 경우는 없다.
+'''
+# 출력
+'''
+출력해야하는 명령이 주어질 때마다, 한 줄에 하나씩 출력한다.
+'''
+# 해법
+'''
+push를 제외한 모든 명령어는 반환값이 존재
+1. 각 명령어에 대응하는 함수를 구현
+2. N을 입력받음
+3. N개의 줄에 걸쳐 명령어를 입력받고 실행
+'''
+class Q:
+    def __init__(self):
+        self.q=[]
+    def push(self, e):
+        self.q.append(e)
+    def pop(self):
+        if self.empty()!=1:
+            result=self.q.pop(0)
+            return result
+        else:
+            return -1
+    def size(self):
+        return len(self.q)
+    def empty(self):
+        if len(self.q)==0:
+            return 1
+        else:
+            return 0
+    def front(self):
+        if self.empty()!=1:
+            return self.q[0]
+        else:
+            return -1
+    def back(self):
+        if self.empty()!=1:
+            return self.q[-1]
+        else:
+            return -1
+queue1=Q()
+commands={'push': queue1.push, 'pop': queue1.pop, 'size': queue1.size,
+          'empty': queue1.empty, 'front': queue1.front, 'back': queue1.back}
+import sys
+N=int(sys.stdin.readline())
+result=[]
+for _ in range(N):
+    cmd=sys.stdin.readline().split()
+    if cmd[0]=='push':
+        commands[cmd[0]](cmd[1])
+    else:
+        result.append(str(commands[cmd[0]]()))
+print('\n'.join(result))
+# 시간 초과 발생
+'''
+각 함수를 따로 만드는 수밖에 없다
+'''
+import sys
+queue=[]
+def push(e):
+    queue.append(e)
+def empty():
+    if len(queue)==0:
+        return '1'
+    else:
+        return '0'
+def pop():
+    if empty()!='1':
+        result=queue.pop(0)
+        return result
+    else:
+        return '-1'
+def size():
+    return str(len(queue))
+def front():
+    if len(queue)!=0:
+        return queue[0]
+    else:
+        return '-1'
+def back():
+    if len(queue)!=0:
+        return queue[-1]
+    else:
+        return '-1'
+N=int(sys.stdin.readline())
+commands={'push': push, 'pop': pop, 'size': size, 'empty': empty,
+          'front': front, 'back': back}
+result=[]
+for _ in range(N):
+    C=sys.stdin.readline().split()
+    if C[0]=='push':
+        commands[C[0]](C[1])
+    else:
+        result.append(commands[C[0]]())
+print('\n'.join(result))
+# 다시 시간 초과
+'''
+pop(0)은 맨 앞 원소를 제거하는 연산인데, 이 경우 뒤 원소들이 모두 한 칸씩 당겨지며
+비효율성이 발생한다.
+'''
+import sys
+queue=[]
+def push(e):
+    queue.append(e)
+def empty():
+    if len(queue)==0:
+        return '1'
+    else:
+        return '0'
+def pop():
+    if empty()!='1':
+        queue.reverse()
+        result=queue.pop()
+        queue.reverse()
+        return result
+    else:
+        return '-1'
+def size():
+    return str(len(queue))
+def front():
+    if len(queue)!=0:
+        return queue[0]
+    else:
+        return '-1'
+def back():
+    if len(queue)!=0:
+        return queue[-1]
+    else:
+        return '-1'
+N=int(sys.stdin.readline())
+commands={'push': push, 'pop': pop, 'size': size, 'empty': empty,
+          'front': front, 'back': back}
+result=[]
+for _ in range(N):
+    C=sys.stdin.readline().split()
+    if C[0]=='push':
+        commands[C[0]](C[1])
+    else:
+        result.append(commands[C[0]]())
+print('\n'.join(result))
+# reverse 두 번을 수행해도 별 성과가 없다. deque 자료구조를 사용해 보면?
+'''
+collections.deque는 queue.Queue보다 속도가 빠르다
+'''
+from collections import deque
+import sys
+dq1=deque()
+def push(e):
+    dq1.append(e)
+def empty():
+    if len(dq1)==0:
+        return '1'
+    else:
+        return '0'
+def pop():
+    if len(dq1)!=0:
+        result=dq1.popleft()
+        return result
+    else:
+        return '-1'
+def size():
+    return str(len(dq1))
+def front():
+    if len(dq1)!=0:
+        return dq1[0]
+    else:
+        return '-1'
+def back():
+    if len(dq1)!=0:
+        return dq1[-1]
+    else:
+        return '-1'
+commands={'push': push, 'pop': pop, 'size': size, 'empty': empty,
+          'front': front, 'back': back}
+N=int(sys.stdin.readline())
+result=deque()
+for _ in range(N):
+    C=sys.stdin.readline().split()
+    if C[0]=='push':
+        commands[C[0]](C[1])
+    else:
+        result.append(commands[C[0]]())
+print('\n'.join(result))
