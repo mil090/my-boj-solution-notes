@@ -574,3 +574,49 @@ while len(numbers)>1:
     r2=numbers.popleft()
     numbers.append(r2)
 print(numbers[0])
+
+# 11866번: 요세푸스 문제 0
+# 문제
+'''
+요세푸스 문제는 다음과 같다.
+1번부터 N번까지 N명의 사람이 원을 이루면서 앉아있고, 양의 정수 K(≤ N)가 주어진다. 
+이제 순서대로 K번째 사람을 제거한다. 한 사람이 제거되면 남은 사람들로 이루어진 원을 
+따라 이 과정을 계속해 나간다. 이 과정은 N명의 사람이 모두 제거될 때까지 계속된다. 
+원에서 사람들이 제거되는 순서를 (N, K)-요세푸스 순열이라고 한다. 예를 들어 
+(7, 3)-요세푸스 순열은 <3, 6, 2, 7, 5, 1, 4>이다.
+N과 K가 주어지면 (N, K)-요세푸스 순열을 구하는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+첫째 줄에 N과 K가 빈 칸을 사이에 두고 순서대로 주어진다. (1 ≤ K ≤ N ≤ 1,000)
+'''
+# 출력
+'''
+예제와 같이 요세푸스 순열을 출력한다.
+'''
+# 해법
+'''
+1. N, K를 입력받음. 결과를 저장할 빈 덱 result를 생성
+2. '1'부터 'N'까지의 문자열 자연수를 원소로 갖는 덱 numbers를 생성하고, 각 자연수가
+result에 포함되었는지 표시할 덱 included를 모든 원소가 False이고 길이가 N인 리스트로
+초기화
+3. 변수 idx를 K-1로 초기화
+무한 루프 반복문을 생성
+4. cur을 numbers[idx]로 저장한 후 numbers에서 cur을 제거. result에 cur을 삽입
+4가 종료된 후 result의 길이가 N이면 반복문을 탈출
+5. idx를 (idx-1+K)%len(numbers)로 대체
+6. result의 원소들을 쉼표와 공백 간격으로 출력하고, 이들을 <>로 묶음
+'''
+from collections import deque
+N, K=map(int, input().split())
+result=deque()
+numbers=deque([f'{x}' for x in range(1, N+1)])
+idx=K-1
+while True:
+    cur=numbers[idx]
+    numbers.remove(cur)
+    result.append(cur)
+    if len(result)==N:
+        break
+    idx=(idx-1+K)%len(numbers)
+print('<'+', '.join(result)+'>')
