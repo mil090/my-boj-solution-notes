@@ -620,3 +620,83 @@ while True:
         break
     idx=(idx-1+K)%len(numbers)
 print('<'+', '.join(result)+'>')
+
+# 28279번: 덱 2
+# 문제
+'''
+정수를 저장하는 덱을 구현한 다음, 입력으로 주어지는 명령을 처리하는 프로그램을 작성하시오.
+명령은 총 여덟 가지이다.
+1 X: 정수 X를 덱의 앞에 넣는다. (1 ≤ X ≤ 100,000)
+2 X: 정수 X를 덱의 뒤에 넣는다. (1 ≤ X ≤ 100,000)
+3: 덱에 정수가 있다면 맨 앞의 정수를 빼고 출력한다. 없다면 -1을 대신 출력한다.
+4: 덱에 정수가 있다면 맨 뒤의 정수를 빼고 출력한다. 없다면 -1을 대신 출력한다.
+5: 덱에 들어있는 정수의 개수를 출력한다.
+6: 덱이 비어있으면 1, 아니면 0을 출력한다.
+7: 덱에 정수가 있다면 맨 앞의 정수를 출력한다. 없다면 -1을 대신 출력한다.
+8: 덱에 정수가 있다면 맨 뒤의 정수를 출력한다. 없다면 -1을 대신 출력한다.
+'''
+# 입력
+'''
+첫째 줄에 명령의 수 N이 주어진다. (1 ≤ N ≤ 1,000,000)
+둘째 줄부터 N개 줄에 명령이 하나씩 주어진다.
+출력을 요구하는 명령은 하나 이상 주어진다.
+'''
+# 출력
+'''
+출력을 요구하는 명령이 주어질 때마다 명령의 결과를 한 줄에 하나씩 출력한다.
+'''
+# 해법
+'''
+1. 각 연산을 구현
+2. 빈 덱 객체 deque1을 생성
+3. 명령어의 번호를 key, 각 명령어 번호에 대응하는 함수를 value로 하는 딕셔너리 
+commands를 생성
+4. N을 입력받음. 반환값을 저장할 빈 덱 result를 생성
+5. N개의 줄에 걸쳐 명령어를 입력받아 처리하고, 반환값이 있다면 그 반환값을 result에 삽입
+6. result의 모든 원소들을 공백 간격으로 출력
+'''
+from collections import deque
+import sys
+def push_first(d: deque, e):
+    d.appendleft(e)
+def push_last(d: deque, e):
+    d.append(e)
+def pop_first(d: deque):
+    if len(d)!=0:
+        return d.popleft()
+    else:
+        return -1
+def pop_last(d: deque):
+    if len(d)!=0:
+        return d.pop()
+    else:
+        return -1
+def size(d: deque):
+    return len(d)
+def is_empty(d: deque):
+    if len(d)==0:
+        return 1
+    else:
+        return 0
+def get_first(d: deque):
+    if len(d)!=0:
+        return d[0]
+    else:
+        return -1
+def get_last(d: deque):
+    if len(d)!=0:
+        return d[-1]
+    else:
+        return -1
+commands={1: push_first, 2: push_last, 3: pop_first, 4: pop_last,
+          5: size, 6: is_empty, 7: get_first, 8: get_last}
+deque1=deque()
+N=int(sys.stdin.readline())
+result=deque()
+for _ in range(N):
+    cmd=list(map(int, sys.stdin.readline().split()))
+    if len(cmd)==2:
+        commands[cmd[0]](deque1, cmd[1])
+    else:
+        result.append(str(commands[cmd[0]](deque1)))
+print('\n'.join(result))
