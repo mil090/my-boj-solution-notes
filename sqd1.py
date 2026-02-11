@@ -761,3 +761,77 @@ while True:
     else:
         idx=(idx+r)%len(B)
 print(' '.join(result))
+
+# 24511번: queuestack
+# 문제
+'''
+한가롭게 방학에 놀고 있던 도현이는 갑자기 재밌는 자료구조를 생각해냈다. 그 자료구조의 
+이름은 queuestack이다.
+queuestack의 구조는 다음과 같다. 
+1번, 2번, ... , N번의 자료구조(queue 혹은 stack)가 나열되어 있으며, 각각의 
+자료구조에는 한 개의 원소가 들어있다.
+queuestack의 작동은 다음과 같다.
+x_0을 입력받는다.
+x_0을 1번 자료구조에 삽입한 뒤 1번 자료구조에서 원소를 pop한다. 그때 pop된 원소를 
+x_1이라 한다. x_1을 2번 자료구조에 삽입한 뒤 2번 자료구조에서 원소를 pop한다. 그때 
+pop된 원소를 x_2이라 한다. ...x_{N-1}을 N번 자료구조에 삽입한 뒤 N번 자료구조에서 
+원소를 pop한다. 그때 pop된 원소를 x_N이라 한다. x_N을 리턴한다. 도현이는 길이 M의 
+수열 C를 가져와서 수열의 원소를 앞에서부터 차례대로 queuestack에 삽입할 것이다. 
+이전에 삽입한 결과는 남아 있다. (예제 1 참고)
+queuestack에 넣을 원소들이 주어졌을 때, 해당 원소를 넣은 리턴값을 출력하는 프로그램을 
+작성해보자.
+'''
+# 입력
+'''
+첫째 줄에 queuestack을 구성하는 자료구조의 개수 $N$이 주어진다. 
+(1 <= N <= 100,000)
+둘째 줄에 길이 N의 수열 A가 주어진다. i번 자료구조가 큐라면 A_i = 0, 스택이라면 
+A_i = 1이다.
+셋째 줄에 길이 N의 수열 B가 주어진다. B_i는 i번 자료구조에 들어 있는 원소이다. 
+(1 <= B_i <= 1,000,000,000)
+넷째 줄에 삽입할 수열의 길이 M이 주어진다. (1 <= M <= 100,000)
+다섯째 줄에 queuestack에 삽입할 원소를 담고 있는 길이 M의 수열 C가 주어진다. 
+(1 <= C_i <= 1,000,000,000)
+입력으로 주어지는 모든 수는 정수이다.
+'''
+# 출력
+'''
+수열 C의 원소를 차례대로 queuestack에 삽입했을 때의 리턴값을 공백으로 구분하여 출력한다.
+'''
+# 해법
+'''
+1. N을 입력받음. N개의 자료구조를 저장할 빈 덱 structures를 생성하고, 그 안에 빈 덱
+N개를 삽입
+2. N개의 자료구조 형태를 입력받아 덱 types로 저장. 각 자료구조의 인덱스(0~N-1)를 
+key,types를 value로 하는 딕셔너리 idx_type을 생성(enumerate를 이용)
+3. 각 자료구조에 들어 있는 원소 N개를 입력받아 알맞은 위치의 자료구조에 삽입
+삽입 연산은 스택, 큐에 관계없이 append 함수를 이용
+4. M을 입력받음. 결괏값을 저장할 빈 덱 result를 생성
+5. x_0으로 사용할 M개의 값을 입력받아 덱 I로 저장
+6. 주어진 연산의 규칙을 파악
+스택에 들어 있는 원소들은 절대로 바뀌지 않는다. 바뀌는 것은 큐뿐이다.
+따라서 우리에게 필요한 것은 큐에 있는 원소들이다.
+7. 큐에 있는 모든 원소들만을 모아 덱 queue_values로 저장
+I의 원소 e에 대하여 다음 8~10의 연산을 수행
+8. queue_values의 맨 마지막 원소를 제거하여 r로 저장(pop 함수를 이용)
+9. queue_values의 맨 앞에 e를 삽입(appendleft 함수를 이용)
+10. str(r)을 result에 삽입
+11. result의 모든 원소들을 공백 간격으로 출력
+'''
+from collections import deque
+N=int(input())
+result=deque()
+types=list(map(int, input().split()))
+numbers=list(map(int, input().split()))
+M=int(input())
+I=list(map(int, input().split()))
+queue_values=deque()
+# 큐의 원소들만을 저장
+for i in range(N):
+    if types[i]==0:
+        queue_values.append(numbers[i])
+for e in I:
+    queue_values.appendleft(e)
+    r=queue_values.pop()
+    result.append(str(r))
+print(' '.join(result))
