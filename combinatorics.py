@@ -94,3 +94,25 @@ print(2**N)
 from math import factorial
 N=int(input())
 print(factorial(N))
+
+# 11050번: 이항 계수 1
+# 문제
+'''
+자연수 N과 정수 K가 주어졌을 때 이항 계수 comb(N, K)를 구하는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+첫째 줄에 N과 K가 주어진다. (1<=N<=10, 0<=K<=N)
+'''
+# 출력
+'''
+comb(N, K)를 출력한다
+'''
+# 해법
+'''
+1. N, K를 입력받음
+2. comb(N, K)를 출력
+'''
+from math import comb
+N, K=map(int, input().split())
+print(comb(N, K))
