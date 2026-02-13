@@ -117,3 +117,72 @@ for _ in range(N):
     if not dance.isdisjoint(meet):
         dance.update(meet)
 print(len(dance))
+
+# 2108번: 통계학
+# 문제
+'''
+수를 처리하는 것은 통계학에서 상당히 중요한 일이다. 통계학에서 N개의 수를 대표하는 
+기본 통계값에는 다음과 같은 것들이 있다. 단, N은 홀수라고 가정하자.
+산술평균 : N개의 수들의 합을 N으로 나눈 값
+중앙값 : N개의 수들을 증가하는 순서로 나열했을 경우 그 중앙에 위치하는 값
+최빈값 : N개의 수들 중 가장 많이 나타나는 값
+범위 : N개의 수들 중 최댓값과 최솟값의 차이
+N개의 수가 주어졌을 때, 네 가지 기본 통계값을 구하는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+첫째 줄에 수의 개수 N(1 ≤ N ≤ 500,000)이 주어진다. 단, N은 홀수이다. 그 다음 
+N개의 줄에는 정수들이 주어진다. 입력되는 정수의 절댓값은 4,000을 넘지 않는다.
+'''
+# 출력
+'''
+첫째 줄에는 산술평균을 출력한다. 소수점 이하 첫째 자리에서 반올림한 값을 출력한다.
+둘째 줄에는 중앙값을 출력한다.
+셋째 줄에는 최빈값을 출력한다. 여러 개 있을 때에는 최빈값 중 두 번째로 작은 값을 출력한다.
+넷째 줄에는 범위를 출력한다.
+'''
+# 해법
+'''
+round 함수는 일반 반올림 함수와는 다르다. 반올림 연산을 사용하기 위해서는 decimal
+모듈의 ROUND_HALF_UP을 사용해야 한다.
+0. 반올림 함수 traditional_round(num, digit)을 구현
+반올림할 값 num을 Decimal 객체로 변환하여 d로 저장
+d를 소수점 첫째 자리에서 반올림하고, 이를 정수형으로 변환하여 반환
+1. N을 입력받음. 변량을 저장할 빈 덱 x를 생성
+2. N개의 줄에 걸쳐 변량을 입력받아 x에 저장
+3. x를 리스트로 변환
+4. x의 산술 평균을 구하여 avg로 저장
+5. x를 정렬한 후, (N-1)//2에 해당하는 인덱스의 원소가 중앙값이므로 median으로 저장
+6. Counter 함수를 이용하여 각 변량의 빈도를 구하고, 그 결과를 딕셔너리로 변환
+최대 빈도를 most_freq으로 저장하고, 최대 빈도를 가지는 변량만을 모아 리스트로 저장
+이 리스트를 정렬한 후 두 번째로 작은 값을 mode로 저장
+7. x는 이미 정렬되어 있으므로 x[-1]이 최대, x[0]이 최소. 따라서 두 값의 차를 구하여
+R로 저장
+8. avg를 반올림하여 출력
+9. 나머지 세 값들은 모두 정수형이므로 그냥 출력
+'''
+from decimal import Decimal, ROUND_HALF_UP
+from collections import deque, Counter
+import sys
+def traditional_round(num: int|float, digit: int=0):
+    d=Decimal(str(num))
+    return float(d.quantize(Decimal(10)**-digit, rounding=ROUND_HALF_UP))
+N=int(sys.stdin.readline())
+x=deque()
+for _ in range(N):
+    x.append(int(sys.stdin.readline()))
+x=list(x)
+avg=sum(x)/N
+x.sort()
+median=x[(N-1)//2]
+freq=dict(Counter(x))
+most_freq=max(freq.values())
+modes=[key for key, value in freq.items() if value==most_freq]
+modes.sort()
+if len(modes)>=2:
+    mode=modes[1]
+else:
+    mode=modes[0]
+R=x[-1]-x[0]
+result=list(map(str, [int(traditional_round(avg)), median, mode, R]))
+print('\n'.join(result))
