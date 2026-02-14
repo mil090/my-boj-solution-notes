@@ -27,3 +27,42 @@ def fac(n: int):
         return n*fac(n-1)
 N=int(input())
 print(fac(N))
+
+# 10870번: 피보나치 수 5
+# 문제
+'''
+피보나치 수는 0과 1로 시작한다. 0번째 피보나치 수는 0이고, 1번째 피보나치 수는 1이다. 
+그 다음 2번째 부터는 바로 앞 두 피보나치 수의 합이 된다. 이를 식으로 써보면 
+Fn = Fn-1 + Fn-2 (n ≥ 2)가 된다. n=17일때 까지 피보나치 수를 써보면 다음과 같다.
+0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597
+n이 주어졌을 때, n번째 피보나치 수를 구하는 프로그램을 작성하시오.
+'''
+# 입력
+'''
+첫째 줄에 n이 주어진다. n은 20보다 작거나 같은 자연수 또는 0이다.
+'''
+# 출력
+'''
+첫째 줄에 n번째 피보나치 수를 출력한다.
+'''
+# 해법
+'''
+순환 호출을 이용할 수 있지만, n이 커질수록 호출 횟수가 급격히 커져 효율이 저하되므로
+동적 계획법을 이용하자
+1. n번째 피보나치 수를 구하는 fib(n) 함수를 구현
+메모이제이션 테이블 memoization을 빈 리스트로 생성. 각 인덱스에 해당하는 값이
+피보나치 수가 될 예정
+0, 1을 memoization에 삽입
+2 이상 n 이하의 자연수 i에 대하여, memoization[i-2]+memoization[i-1]을
+memoization에 추가
+memoization[n]을 반환
+2. N을 입력받음
+3. fib(N)을 출력
+'''
+def fib(n: int):
+    memoization=[0, 1]
+    for i in range(2, n+1):
+        memoization.append(memoization[i-2]+memoization[i-1])
+    return memoization[n]
+N=int(input())
+print(fib(N))
