@@ -140,3 +140,105 @@ for _ in range(T):
     result.append(isPalindrome(S))
 for r in result:
     print(' '.join(map(str, r)))
+
+# 24060번: 알고리즘 수업 - 병합 정렬 1
+# 문제
+'''
+오늘도 서준이는 병합 정렬 수업 조교를 하고 있다. 아빠가 수업한 내용을 학생들이 잘 
+이해했는지 문제를 통해서 확인해보자.
+N개의 서로 다른 양의 정수가 저장된 배열 A가 있다. 병합 정렬로 배열 A를 오름차순 정렬할 
+경우 배열 A에 K 번째 저장되는 수를 구해서 우리 서준이를 도와주자.
+크기가 N인 배열에 대한 병합 정렬 의사 코드는 다음과 같다.
+merge_sort(A[p..r]) { # A[p..r]을 오름차순 정렬한다.
+    if (p < r) then {
+        q <- ⌊(p + r) / 2⌋;       # q는 p, r의 중간 지점
+        merge_sort(A, p, q);      # 전반부 정렬
+        merge_sort(A, q + 1, r);  # 후반부 정렬
+        merge(A, p, q, r);        # 병합
+    }
+}
+# A[p..q]와 A[q+1..r]을 병합하여 A[p..r]을 오름차순 정렬된 상태로 만든다.
+# A[p..q]와 A[q+1..r]은 이미 오름차순으로 정렬되어 있다.
+merge(A[], p, q, r) {
+    i <- p; j <- q + 1; t <- 1;
+    while (i ≤ q and j ≤ r) {
+        if (A[i] ≤ A[j])
+        then tmp[t++] <- A[i++]; # tmp[t] <- A[i]; t++; i++;
+        else tmp[t++] <- A[j++]; # tmp[t] <- A[j]; t++; j++;
+    }
+    while (i ≤ q)  # 왼쪽 배열 부분이 남은 경우
+        tmp[t++] <- A[i++];
+    while (j ≤ r)  # 오른쪽 배열 부분이 남은 경우
+        tmp[t++] <- A[j++];
+    i <- p; t <- 1;
+    while (i ≤ r)  # 결과를 A[p..r]에 저장
+        A[i++] <- tmp[t++]; 
+}
+'''
+# 입력
+'''
+첫째 줄에 배열 A의 크기 N(5 ≤ N ≤ 500,000), 저장 횟수 K(1 ≤ K ≤ 10**8)가 주어진다.
+다음 줄에 서로 다른 배열 A의 원소 A1, A2, ..., AN이 주어진다. (1 ≤ Ai ≤ 10**9)
+'''
+# 출력
+'''
+배열 A에 K 번째 저장 되는 수를 출력한다. 저장 횟수가 K 보다 작으면 -1을 출력한다.
+'''
+# 해법
+'''
+1. 주어진 유사 코드를 이용하여 병합 정렬 알고리즘을 구현하기
+2. '저장 횟수'에 관한 원리를 이해하기
+이 문제에서 의미하는 'K번째로 저장되는 수'란 완전히 정렬된 배열에서의 위치를 묻는 것이 
+아니라, 비교 후 병합이 K번째 실행될 때 tmp에 저장되는 수를 의미
+3. 저장 횟수를 세는 방법을 고안하기
+N, K를 입력받음. 저장 횟수 및 결과로 사용할 변수 answer을 생성하여 각각 0, -1로 초기화
+merge 함수를 수정. K와 answer을 전역 변수로 사용
+i, j를 각각 left와 right의 맨 앞 인덱스인 p, q+1로 초기화
+입력 리스트 A를 두 개의 부분 리스트 left와 right로 분할
+left=A[p:q+1], right=A[q+1:r+1]
+정렬 결과를 저장할 임시 배열 tmp를 빈 리스트로 생성
+i와 j가 각각 q+1, r+1보다 작은 동안, left[i]와 right[j]를 비교하여 
+left[i]<=right[j]이면 A[i]를 tmp에 삽입하고 i를 1 증가시킴. 그렇지 않다면 
+right[j]를 tmp에 삽입하고 j를 1 증가시킴
+위 while 반복문이 종료되었을 때, left가 남아 있다면 그 남은 원소들을 tmp에 삽입
+right가 남아 있다면 그 남은 원소들을 tmp에 삽입 -> 이렇게 tmp가 완성됨
+이렇게 완성된 tmp의 원소를 하나씩 입력 리스트 A에 덮어씀
+반복 인덱스 idx는 p에서 r까지 반복됨. 각 반복 루프에서 count의 값을 1 증가시키고,
+answer의 값을 tmp[idx]로 대체
+위 과정을 반복하다 count의 값이 K와 같아질 경우, answer에 tmp[idx]의 값을 저장
+이후 answer의 값을 출력
+'''
+count, answer=0, -1
+def merge(A: list, p: int, q: int, r: int, K: int):
+    global count, answer
+    i=p
+    j=q+1
+    temp=[]
+    while i<=q and j<=r:
+        if A[i]<=A[j]:
+            temp.append(A[i])
+            i+=1
+        else:
+            temp.append(A[j])
+            j+=1
+    if i<=q:
+        temp+=A[i:q+1]
+    if j<=r:
+        temp+=A[j:r+1]
+    for idx in range(len(temp)):
+        A[p+idx]=temp[idx]
+        count+=1
+        if count==K:
+            answer=A[p+idx]
+def merge_sort(A: list, p: int, r: int, K: int):
+    if p<r:
+        q=(p+r)//2
+        merge_sort(A, p, q, K)
+        merge_sort(A, q+1, r, K)
+        merge(A, p, q, r, K)
+        return A
+N, K=map(int, input().split())
+L=list(map(int, input().split()))
+result=merge_sort(L, 0, len(L)-1, K)
+print(answer)
+# 병합 정렬은 나올 때마다 어려워하므로 반복된 학습이 필요하다!
